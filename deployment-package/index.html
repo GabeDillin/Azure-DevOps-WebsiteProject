@@ -4,26 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gabe Dillin</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Linking external CSS file -->
 </head>
 <body>
     <header>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="resume.html">Resume</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#about">About Me</a></li>
+                <li><a href="#resume">Resume</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
+        <h1>Welcome to My Portfolio</h1>
     </header>
-    <main>
-        <h1>Welcome to My Website</h1>
-        <p>This is the home page of my website.</p>
-    </main>
+
+    <section id="about">
+        <h2>About Me</h2>
+        <p>This is the about me section.</p>
+    </section>
+
+    <section id="resume">
+        <h2>Resume</h2>
+        <p>This is the resume section.</p>
+    </section>
+
+    <section id="projects">
+        <h2>Projects</h2>
+        <p>This is the projects section.</p>
+    </section>
+
+    <section id="contact">
+        <h2>Contact</h2>
+        <p>This is the contact section.</p>
+    </section>
+
     <footer>
-        <p>&copy; 2024 My Website</p>
+        <p>&copy; 2024 My Portfolio</p>
     </footer>
-    <script src="scripts.js"></script>
+
+    <!-- Inline JavaScript for smooth scrolling -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
