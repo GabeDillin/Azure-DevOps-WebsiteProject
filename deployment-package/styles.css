@@ -6,7 +6,7 @@ body {
 
 header {
     background-color: #410083;
-    color: rgb(0, 0, 0);
+    color: white;
     padding: 1em 0;
     text-align: center;
 }
@@ -22,7 +22,7 @@ header nav ul li {
 }
 
 header nav ul li a {
-    color: rgb(0, 0, 0);
+    color: white;
     text-decoration: none;
 }
 
@@ -32,14 +32,14 @@ section {
 }
 
 section:nth-of-type(even) {
-    background-color: #000000;
+    background-color: #f4f4f4;
 }
 
 footer {
     text-align: center;
     padding: 1em 0;
     background-color: #410083;
-    color: rgb(0, 0, 0);
+    color: white;
 }
 
 h1, h2 {
