@@ -1,0 +1,21 @@
+trigger:
+  branches:
+   include:
+     - master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: npm install
+  displayName: 'npm install'
+  workingDirectory: .
+
+- script: npm run build
+  displayName: 'npm build'
+  workingDirectory: .
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: 'deployment-package'
+    artifactName: 'static-web-app'
