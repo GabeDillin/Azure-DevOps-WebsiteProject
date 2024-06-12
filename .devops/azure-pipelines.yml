@@ -12,9 +12,9 @@ variables:
   azureLocation: 'westus2'
   azureSubscription: 'Lynden Azure Dev/Test Connection'
   servicePrincipalId: 'c81f4327-8ef2-4e48-82e8-4d3cef3cdec9'
-  servicePrincipalSecret: 'xxx'
+  servicePrincipalSecret: '0ffdff26-4392-4ffa-b9d9-9be310b4287a'
   tenantId: 'c767eef7-56b9-40a5-a91b-be6c2fab7c12'
-  personalAccessToken: 'xxx'
+  personalAccessToken: 'p7kzcql5hl72qmzjmw2effbog3j2freftld3yjrdd74uotscqs7a'
 
 steps:
   - script: |
