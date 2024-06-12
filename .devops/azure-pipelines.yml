@@ -1,7 +1,7 @@
 trigger:
   branches:
-   include:
-     - master
+    include:
+      - master
 
 pool:
   vmImage: ubuntu-latest
@@ -9,52 +9,59 @@ pool:
 variables:
   azureResourceGroupName: 'sbx-gdillin-rg'
   azureStaticWebAppName: 'GabeProjectWebApp'
-  azureLocation: 'westus'
-  azureSubscription: 'cbdf99d5-47cc-491a-a603-5c3b2b8151f1'
+  azureLocation: 'westus2'
+  azureSubscription: 'Lynden Azure Dev/Test Connection'
+  servicePrincipalId: 'c81f4327-8ef2-4e48-82e8-4d3cef3cdec9'
+  servicePrincipalSecret: '0ffdff26-4392-4ffa-b9d9-9be310b4287a'
+  tenantId: 'c767eef7-56b9-40a5-a91b-be6c2fab7c12'
+  personalAccessToken: 'p7kzcql5hl72qmzjmw2effbog3j2freftld3yjrdd74uotscqs7a'
 
 steps:
-- task: UseNode@2
-  inputs:
-    versionSpec: '14.x'
-  displayName: 'Install Node.js'
+  - script: |
+      curl -sL https://deb.nodesource.com/setup_21.x | sudo -E bash -
+      sudo apt-get install -y nodejs
+      sudo npm install -g npm@latest
+    displayName: 'Install Node.js'
 
-- script: npm install
-  displayName: 'npm install'
-  workingDirectory: .
+  - script: npm install
+    displayName: 'npm install'
+    workingDirectory: .
 
-- script: npm run build
-  displayName: 'npm build'
-  workingDirectory: .
+  - script: npm run build
+    displayName: 'npm build'
+    workingDirectory: .
 
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: $(azureSubscription)
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      # Create resource group if it doesn't exist
-      az group create --name $(azureResourceGroupName) --location $(azureLocation)
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: $(azureSubscription)
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az login --service-principal -u $(servicePrincipalId) -p $(servicePrincipalSecret) --tenant $(tenantId)
+        # Create resource group if it doesn't exist
+        az group create --name $(azureResourceGroupName) --location $(azureLocation)
 
-  displayName: 'Create Resource Group'
+    displayName: 'Create Resource Group'
 
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: $(azureSubscription)
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      az staticwebapp create --name $(azureStaticWebAppName) --resource-group $(azureResourceGroupName) \
-        --location $(azureLocation) --branch master --source https://dev.azure.com/lyndencloud/GabesProject/_git/GabesProject \
-        --app-location . --output-location ''
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: $(azureSubscription)
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az login --service-principal -u $(servicePrincipalId) -p $(servicePrincipalSecret) --tenant $(tenantId)
+        az staticwebapp create --name $(azureStaticWebAppName) --resource-group $(azureResourceGroupName) \
+          --location $(azureLocation) --branch master --source https://dev.azure.com/lyndencloud/GabesProject/_git/GabesProject \
+          --app-location . --output-location ''
 
-  displayName: 'Deploy to Azure Static Web App'
+    displayName: 'Deploy to Azure Static Web App'
 
-- task: AzureStaticWebApp@0
-  inputs:
-    app_location: 'deployment-package'
-    output_location: ''
-    azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN)
-    resource_group_name: $(azureResourceGroupName)
-    static_web_app_name: $(azureStaticWebAppName)
-    location: $(azureLocation)
-  displayName: 'Deploy to Azure Static Web App'
+  - task: AzureStaticWebApp@0
+    inputs:
+      app_location: 'deployment-package'
+      output_location: ''
+      azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN)
+      resource_group_name: $(azureResourceGroupName)
+      static_web_app_name: $(azureStaticWebAppName)
+      location: $(azureLocation)
+    displayName: 'Deploy to Azure Static Web App'
