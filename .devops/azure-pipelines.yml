@@ -1,3 +1,5 @@
+name: Azure Static Web Apps CI/CD
+
 trigger:
   branches:
     include:
@@ -6,17 +8,10 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-variables:
-  azureResourceGroupName: 'sbx-gdillin-rg'
-  azureStaticWebAppName: 'GabeProjectWebApp'
-  azureLocation: 'westus2'
-  azureSubscription: 'Lynden Azure Dev/Test Connection'
-  servicePrincipalId: 'c81f4327-8ef2-4e48-82e8-4d3cef3cdec9'
-  servicePrincipalSecret: '0ffdff26-4392-4ffa-b9d9-9be310b4287a'
-  tenantId: 'c767eef7-56b9-40a5-a91b-be6c2fab7c12'
-  personalAccessToken: 'p7kzcql5hl72qmzjmw2effbog3j2freftld3yjrdd74uotscqs7a'
-
 steps:
+  - checkout: self
+    submodules: true
+
   - script: |
       curl -sL https://deb.nodesource.com/setup_21.x | sudo -E bash -
       sudo apt-get install -y nodejs
@@ -31,37 +26,10 @@ steps:
     displayName: 'npm build'
     workingDirectory: .
 
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: $(azureSubscription)
-      scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        az login --service-principal -u $(servicePrincipalId) -p $(servicePrincipalSecret) --tenant $(tenantId)
-        # Create resource group if it doesn't exist
-        az group create --name $(azureResourceGroupName) --location $(azureLocation)
-
-    displayName: 'Create Resource Group'
-
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: $(azureSubscription)
-      scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        az login --service-principal -u $(servicePrincipalId) -p $(servicePrincipalSecret) --tenant $(tenantId)
-        az staticwebapp create --name $(azureStaticWebAppName) --resource-group $(azureResourceGroupName) \
-          --location $(azureLocation) --branch master --source https://dev.azure.com/lyndencloud/GabesProject/_git/GabesProject \
-          --app-location . --output-location ''
-
-    displayName: 'Deploy to Azure Static Web App'
-
   - task: AzureStaticWebApp@0
     inputs:
-      app_location: 'deployment-package'
-      output_location: ''
-      azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN)
-      resource_group_name: $(azureResourceGroupName)
-      static_web_app_name: $(azureStaticWebAppName)
-      location: $(azureLocation)
-    displayName: 'Deploy to Azure Static Web App'
+      azure_static_web_apps_api_token: '2bb9865beac9487bbdc4a7fc22b6020db6cdc93e588b2ea29b683390be96ae455-34bf1746-6073-4326-8a58-ed5a9d1618b401e165869'
+      skip_app_build: 'true'
+      app_location: "deployment-package" # App source code path
+      api_location: "" # Api source code path - optional
+      output_location: "" # Built app content directory - optional
