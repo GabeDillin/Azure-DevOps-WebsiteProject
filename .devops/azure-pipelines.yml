@@ -32,4 +32,9 @@ steps:
       skip_app_build: 'true'
       app_location: "deployment-package" # App source code path
       api_location: "" # Api source code path - optional
-      output_location: "" # Built app content directory - optional
+      output_location: "deployment-package" # Built app content directory - optional
+      copy_settings: |
+        {
+          "source": "images",
+          "destination": "images"
+        }
