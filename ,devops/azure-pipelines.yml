@@ -1,0 +1,72 @@
+name: Azure Static Web Apps CI/CD
+
+trigger:
+  branches:
+    include:
+      - master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - checkout: self
+    submodules: true
+
+  - script: |
+      curl -sL https://deb.nodesource.com/setup_21.x | sudo -E bash -
+      sudo apt-get install -y nodejs
+      sudo npm install -g npm@latest
+    displayName: 'Install Node.js'
+
+  - script: npm install
+    displayName: 'npm install'
+    workingDirectory: .
+
+  - script: npm run build
+    displayName: 'npm build'
+    workingDirectory: .
+
+  - task: TerraformInstaller@0
+    inputs:
+      terraformVersion: 'latest'
+
+  - script: az login --service-principal -u "c81f4327-8ef2-4e48-82e8-4d3cef3cdec9" -p $(clientSecret) --tenant "c767eef7-56b9-40a5-a91b-be6c2fab7c12"
+    displayName: 'Azure CLI Login'
+
+  - script: az account set --subscription cbdf99d5-47cc-491a-a603-5c3b2b8151f1
+    displayName: 'Azure Subscription Set'
+  
+  - script: |
+      terraform init
+      terraform plan -out=tfplan
+    displayName: 'Terraform Init and Plan'
+    workingDirectory: .
+
+  - script: |
+      terraform apply -auto-approve tfplan
+    displayName: 'Terraform Apply'
+    workingDirectory: .
+
+  - task: AzurePowerShell@5
+    inputs:
+      azureSubscription: 'Lynden Azure Dev/Test Connection'
+      azurePowerShellVersion: 12.0.0
+      ScriptType: 'InlineScript'
+      Inline: |
+        $webApp = Get-AzStaticWebApp -ResourceGroupName sbx-gdillin-rg -Name gdillin-webapp
+        $webAppToken = $webApp.apiKey
+        Write-Output "##vso[task.setvariable variable=webAppToken;issecret=true]$webAppToken"
+    displayName: 'Get Azure Static Web App Token'
+
+  - task: AzureStaticWebApp@0
+    inputs:
+      azure_static_web_apps_api_token: $(webAppToken)
+      skip_app_build: 'true'
+      app_location: "deployment-package" # App source code path
+      api_location: "" # Api source code path - optional
+      output_location: "deployment-package" # Built app content directory - optional
+      copy_settings: |
+        {
+          "source": "images",
+          "destination": "images"
+        }
