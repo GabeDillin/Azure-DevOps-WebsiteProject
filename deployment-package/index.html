@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabe Dillin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#about">About Me</a></li>
+                <li><a href="#resume">Resume</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <h1>Welcome to My Portfolio</h1>
+    </header>
+
+    <section id="about">
+        <h2>About Me</h2>
+        <p>I am a student at the University of Washington with experience in Software Development, primarily in Java and Python, DevOps, and Cloud Administration. I am interested in continuing work in Software Engineering, Cloud Security, or Cloud Architecture, primarily focusing on Backend Development in the Cloud. 
+            I have a passion for Enterprise Software and automating processes at an organizational level to streamline business processes, and I consider myself a self-starter committed to providing valuable solutions to companies.</p>
+    </section>
+
+    <section id="resume">
+        <h2>Resume</h2>
+        <p>This is the resume section.</p>
+        <button onclick="downloadFile('downloads/resume.docx', 'resume.docx')">Download Resume</button>
+    </section>
+
+    <section id="projects">
+        <h2>Projects</h2>
+        <p>This is the projects section.</p>
+    </section>
+
+    <section id="contact">
+        <h2>Contact</h2>
+        <p>This is the contact section.</p>
+        <p>
+            <a href="https://github.com/GabeDillin" target="_blank">
+                <img src="downloads/purplegithub.jpg" alt="GitHub" class="social-icon">
+            </a>
+            <a href="https://www.linkedin.com/in/gabe-dillin-17436b215" target="_blank">
+                <img src="downloads/linkedinlogo.jpg" alt="LinkedIn" class="social-icon">
+            </a>
+        </p>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 My Portfolio</p>
+    </footer>
+
+    <!-- JavaScript for downloading file -->
+    <script>
+        function downloadFile(filePath, fileName) {
+            var link = document.createElement('a');
+            link.href = filePath;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+    
+    <!-- JavaScript for smooth scrolling -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
