@@ -38,13 +38,13 @@ steps:
   
   - script: |
       terraform init
+      if az staticwebapp show -n gdillin-webapp -g sbx-gdillin-rg > /dev/null 2>&1; then
+        echo "Static Web App 'gdillin-webapp' already exists. Importing into Terraform state..."
+        terraform import azurerm_static_web_app.gdillin-staticwebapp /subscriptions/cbdf99d5-47cc-491a-a603-5c3b2b8151f1/resourceGroups/sbx-gdillin-rg/providers/Microsoft.Web/staticSites/gdillin-webapp
+      fi
       terraform plan -out=tfplan
-    displayName: 'Terraform Init and Plan'
-    workingDirectory: .
-
-  - script: |
       terraform apply -auto-approve tfplan
-    displayName: 'Terraform Apply'
+    displayName: 'Terraform Init, Plan, and Apply'
     workingDirectory: .
 
   - task: AzurePowerShell@5
