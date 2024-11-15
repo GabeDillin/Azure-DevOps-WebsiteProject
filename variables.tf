@@ -1,17 +1,17 @@
 variable "static_site_name" {
     description = "The name of the static site"
     type        = string
-    default = "gdillin-webapp"
+    default = "example-webapp"
 }
 
 variable "resource_group_name" {
     description = "The name of the resource group"
     type        = string
-    default     = "sbx-gdillin-rg"
+    default     = "example-rg"
 }
 
 variable "location" {
-    description = "Location of gdillin resource group"
+    description = "Location of the resource group"
     type        = string
     default     = "westus2"
 }
