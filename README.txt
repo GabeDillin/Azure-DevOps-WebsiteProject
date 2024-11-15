@@ -1,2 +1,2 @@
-Website for me that lists my resume, some social medias, and a relatively blank website
-Designed to run on Azure DevOps, with a functional .yml Pipeline to Azure Web Servers
+Website for me that lists an example resume, social medias, and a relatively blank website
+Deployed via CI/CD on Azure Infrastructure with Azure DevOps, with a functional secure .yaml Pipeline to Azure Web Servers
