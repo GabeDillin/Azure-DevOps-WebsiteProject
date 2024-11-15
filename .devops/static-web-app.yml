@@ -30,17 +30,17 @@ steps:
     inputs:
       terraformVersion: 'latest'
 
-  - script: az login --service-principal -u "c81f4327-8ef2-4e48-82e8-4d3cef3cdec9" -p $(clientSecret) --tenant "c767eef7-56b9-40a5-a91b-be6c2fab7c12"
+  - script: az login --service-principal -u "xxxx-xxxx-xxxx" -p $(clientSecret) --tenant "xxxx-xxxxx-xxxxxx"
     displayName: 'Azure CLI Login'
 
-  - script: az account set --subscription cbdf99d5-47cc-491a-a603-5c3b2b8151f1
+  - script: az account set --subscription xxxx-xxxx-xxxx
     displayName: 'Azure Subscription Set'
   
   - script: |
       terraform init
-      if az staticwebapp show -n gdillin-webapp -g sbx-gdillin-rg > /dev/null 2>&1; then
-        echo "Static Web App 'gdillin-webapp' already exists. Importing into Terraform state..."
-        terraform import azurerm_static_web_app.gdillin-staticwebapp /subscriptions/cbdf99d5-47cc-491a-a603-5c3b2b8151f1/resourceGroups/sbx-gdillin-rg/providers/Microsoft.Web/staticSites/gdillin-webapp
+      if az staticwebapp show -n example-webapp -g example-rg > /dev/null 2>&1; then
+        echo "Static Web App 'example-webapp' already exists. Importing into Terraform state..."
+        terraform import azurerm_static_web_app.example-webapp /subscriptions/path/to/your/webapp/example-webapp
       fi
       terraform plan -out=tfplan
       terraform apply -auto-approve tfplan
@@ -53,7 +53,7 @@ steps:
       azurePowerShellVersion: 12.0.0
       ScriptType: 'InlineScript'
       Inline: |
-        $webApp = Get-AzStaticWebApp -ResourceGroupName sbx-gdillin-rg -Name gdillin-webapp
+        $webApp = Get-AzStaticWebApp -ResourceGroupName example-rg -Name example-webapp
         $webAppToken = $webApp.apiKey
         Write-Output "##vso[task.setvariable variable=webAppToken;issecret=true]$webAppToken"
     displayName: 'Get Azure Static Web App Token'
